@@ -16,16 +16,6 @@ app.use(cors())
 
 app.use(express.static('build'))
 
-const url = process.env.MONGODB_URI
-
-mongoose.connect(url)
-
-const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
-})
-
-const Person = mongoose.model('Person', personSchema)
 
 app.get('/api/persons', (req,res) => {
     Person.find({}.then(persons => {
