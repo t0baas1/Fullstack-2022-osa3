@@ -2,6 +2,9 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+
+require('dotenv').config();
 
 app.use(express.json())
 
@@ -11,39 +14,21 @@ app.use(cors())
 
 app.use(express.static('build'))
 
-let persons = [
-{
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456"
-},
-{
-    id: 2,
-    name: "Ada Lovelace",
-    date: "39-44-5323523"
-},
-{
-    id: 3,
-    name: "Dan Abramov",
-    date: "12-43-234345"
-},
-{
-    id: 4,
-    name: "Mary Poppendick",
-    numebr: "39-23-6423122"
-}
-]
+const url = `mongodb+srv://fullstack:${process.env.MONGO_PASS}@cluster0.tomqt.mongodb.net/phonebookBackend?retryWrites=true&w=majority`
 
-app.get('/', (req,res) => {
-    res.send('<h1>Hello World!</h1>')
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+    name: String,
+    number: String
 })
+
+const Person = mongoose.model('Person', personSchema)
 
 app.get('/api/persons', (req,res) => {
-    res.json(persons)
-})
-
-app.get('/info', (req, res) => {
-    res.send(`Phonebook has info of ${persons.length} people</br>${Date()}`)
+    Person.find({}.then(persons => {
+        res.json(persons)
+    }))
 })
 
 app.get('/api/persons/:id', (req, res) => {
