@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
 
 const Person = require('./models/person')
 
@@ -18,9 +17,9 @@ app.use(express.static('build'))
 
 
 app.get('/api/persons', (req,res) => {
-    Person.find({}.then(persons => {
+    Person.find({}).then(persons => {
         res.json(persons)
-    }))
+    })
 })
 
 app.get('/api/persons/:id', (req, res) => {
