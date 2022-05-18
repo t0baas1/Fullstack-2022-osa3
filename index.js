@@ -1,10 +1,10 @@
+require('dotenv').config();
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-require('dotenv').config();
 
 app.use(express.json())
 
@@ -14,7 +14,7 @@ app.use(cors())
 
 app.use(express.static('build'))
 
-const url = `mongodb+srv://fullstack:${process.env.MONGO_PASS}@cluster0.tomqt.mongodb.net/phonebookBackend?retryWrites=true&w=majority`
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
 
