@@ -18,6 +18,13 @@ app.use(cors())
 app.use(express.static('build'))
 
 
+app.get('/info', (req, res) => {
+    const day = Date()
+    Person.find({}).then(persons => {
+        res.send(`<p>Phonebook has info for ${persons.length} people </br>${day}</p>`)
+    })
+})
+
 app.get('/api/persons', (req,res) => {
     Person.find({}).then(persons => {
         res.json(persons)
@@ -25,7 +32,7 @@ app.get('/api/persons', (req,res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    Person.findById(request.params.id)
+    Person.findById(req.params.id)
         .then(person => {
             if (person) {
                 res.json(person)
