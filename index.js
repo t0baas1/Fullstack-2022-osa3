@@ -72,7 +72,7 @@ app.put('/api/persons/:id', (req, res, next) => {
         number: body.number
     }
 
-    Person.findByIdAndUpdate(reg.params.id, person, { new: true })
+    Person.findByIdAndUpdate(req.params.id, person, { new: true })
         .then(updatedPerson => {
             res.json(updatedPerson)
         })
