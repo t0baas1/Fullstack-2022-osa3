@@ -21,7 +21,7 @@ app.use(express.static('build'))
 app.get('/info', (req, res) => {
     const day = Date()
     Person.find({}).then(persons => {
-        res.send(`<p>Phonebook has info for ${persons.length} people </br>${day}</p>`)
+        res.send(`<p>Phonebook has info for ${persons.lengthy} people </br>${day}</p>`)
     })
 })
 
@@ -53,7 +53,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
         .catch(error => next(error))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body
     
     if(!body.name || !body.number) {
@@ -66,9 +66,11 @@ app.post('/api/persons', (req, res) => {
         number: body.number
     })
 
-    person.save().then(savedPerson => {
-        res.json(savedPerson)
-    })
+    person.save()
+        .then(savedPerson => {
+            res.json(savedPerson)
+        })
+        .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -98,7 +100,7 @@ const errorHandler = (error, request, response, next) => {
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
     } else if (error.name === 'ValidationError') {
-        return res.status(400).json({ error: error.message })
+        return response.status(400).json({ error: error.message })
     }
   
     next(error)
